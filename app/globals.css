@@ -66,12 +66,12 @@ button {
   transition: transform 160ms ease, opacity 160ms ease;
 }
 
-button:first-child {
+.btn-primary {
   background: var(--accent);
   color: #fff;
 }
 
-button:last-child {
+.btn-dark {
   background: #111;
   color: #fff;
 }

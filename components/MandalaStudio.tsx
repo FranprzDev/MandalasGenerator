@@ -5,7 +5,7 @@ import { MandalaCanvas } from "@/components/MandalaCanvas";
 import { pushHistory, DEFAULT_DIVERSITY_POLICY } from "@/lib/mandala/diversity";
 import { generateUniqueMandala } from "@/lib/mandala/generator";
 import { createRandomSeed } from "@/lib/mandala/random";
-import { exportAndDownload } from "@/lib/export/pdf";
+import { exportAndDownload, exportBatchAndDownload } from "@/lib/export/pdf";
 import type { MandalaFingerprint, MandalaSpec } from "@/types/mandala";
 
 function createInitialMandala() {
@@ -74,6 +74,41 @@ export function MandalaStudio() {
     }
   };
 
+  const downloadBatchPdf = async () => {
+    setErrorMessage(null);
+    setIsExporting(true);
+    try {
+      const batchHistory = [...history];
+      const batch: MandalaSpec[] = [];
+
+      for (let i = 0; i < 10; i += 1) {
+        const result = generateUniqueMandala(
+          {
+            profile: "medium",
+            size: 1200,
+            strokeBase: strokeWidth,
+            createSeed: createRandomSeed,
+          },
+          batchHistory,
+        );
+        batch.push(result.spec);
+        batchHistory.push(result.spec.fingerprint);
+      }
+
+      await exportBatchAndDownload(batch, {
+        page: "A4",
+        orientation: "portrait",
+        marginMm: 10,
+        mode: "raster-only",
+        filename: `mandalas-10-${Date.now()}.pdf`,
+      });
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "No se pudo exportar el PDF de 10 mandalas.");
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <main className="page">
       <section className="card">
@@ -81,11 +116,14 @@ export function MandalaStudio() {
         <p>Genera una mandala distinta y descargala en PDF A4 lista para imprimir.</p>
 
         <div className="actions">
-          <button type="button" onClick={generate} disabled={isGenerating || isExporting}>
+          <button className="btn-primary" type="button" onClick={generate} disabled={isGenerating || isExporting}>
             {isGenerating ? "Generando..." : "Generar nueva mandala"}
           </button>
-          <button type="button" onClick={downloadPdf} disabled={!mandala || isGenerating || isExporting}>
+          <button className="btn-dark" type="button" onClick={downloadPdf} disabled={!mandala || isGenerating || isExporting}>
             {isExporting ? "Exportando..." : "Descargar PDF"}
+          </button>
+          <button className="btn-dark" type="button" onClick={downloadBatchPdf} disabled={isGenerating || isExporting}>
+            {isExporting ? "Exportando..." : "Descargar PDF x10"}
           </button>
         </div>
 

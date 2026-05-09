@@ -1,4 +1,5 @@
 import type { ExportOptions } from "@/types/mandala";
+import type { MandalaSpec } from "@/types/mandala";
 
 const MM_TO_PT = 72 / 25.4;
 const A4_WIDTH_MM = 210;
@@ -72,4 +73,62 @@ export async function exportMandalaPdf(svgEl: SVGSVGElement, options: ExportOpti
 export async function exportAndDownload(svgEl: SVGSVGElement, options: ExportOptions): Promise<void> {
   const blob = await exportMandalaPdf(svgEl, options);
   downloadBlob(blob, options.filename ?? "mandala-a4.pdf");
+}
+
+function createSvgMarkup(spec: MandalaSpec, strokeWidth: number): string {
+  const paths = spec.layers
+    .map((layer) =>
+      layer.paths
+        .map(
+          (path, idx) =>
+            `<path d="${path}" data-k="${layer.ringIndex}-${idx}" stroke="#000000" stroke-width="${strokeWidth}" fill="none" stroke-linecap="round" stroke-linejoin="round" />`,
+        )
+        .join(""),
+    )
+    .join("");
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${spec.viewBox}"><rect width="100%" height="100%" fill="#ffffff" />${paths}</svg>`;
+}
+
+export async function exportBatchAndDownload(
+  specs: MandalaSpec[],
+  options: ExportOptions,
+  strokeWidth = 1,
+): Promise<void> {
+  if (!specs.length) throw new Error("No hay mandalas para exportar.");
+
+  const { jsPDF } = await import("jspdf");
+  const { Canvg } = await import("canvg");
+  const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+  const dpi = 300;
+  const widthPx = Math.round((A4_WIDTH_MM / 25.4) * dpi);
+  const heightPx = Math.round((A4_HEIGHT_MM / 25.4) * dpi);
+  const marginPx = Math.round((options.marginMm / 25.4) * dpi);
+  const square = Math.min(widthPx - marginPx * 2, heightPx - marginPx * 2);
+
+  for (let i = 0; i < specs.length; i += 1) {
+    const canvas = document.createElement("canvas");
+    canvas.width = widthPx;
+    canvas.height = heightPx;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("No se pudo crear canvas context.");
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, widthPx, heightPx);
+    ctx.save();
+    ctx.translate((widthPx - square) / 2, (heightPx - square) / 2);
+
+    const source = createSvgMarkup(specs[i], strokeWidth);
+    const wrapped = `<svg xmlns="http://www.w3.org/2000/svg" width="${square}" height="${square}" viewBox="${specs[i].viewBox}">${source.replace("<svg", "<g").replace("</svg>", "</g>")}</svg>`;
+    const v = await Canvg.fromString(ctx, wrapped);
+    await v.render();
+    ctx.restore();
+
+    if (i > 0) pdf.addPage("a4", "portrait");
+    const img = canvas.toDataURL("image/png");
+    pdf.addImage(img, "PNG", 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM);
+  }
+
+  downloadBlob(pdf.output("blob"), options.filename ?? "mandalas-lote-a4.pdf");
 }
