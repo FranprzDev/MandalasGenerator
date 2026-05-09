@@ -111,7 +111,6 @@ export function MandalaStudio() {
     <main className="page">
       <section className="card">
         <h1>Mandalas Generator</h1>
-        <p>Genera una mandala distinta y descargala en PDF A4 lista para imprimir.</p>
 
         <div className="actions">
           <button className="btn-primary" type="button" onClick={generate} disabled={isGenerating || isExporting}>
