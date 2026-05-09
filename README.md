@@ -1,14 +1,39 @@
 # MandalasGenerator
 
-Web app en Next.js para generar mandalas aleatorias en el navegador y exportarlas en PDF A4 imprimible.
+Generador web de mandalas aleatorias hecho con Next.js para crear, previsualizar y descargar mandalas en PDF A4 listo para imprimir.
+
+## Por qu茅 existe
+Este proyecto naci贸 para resolver una necesidad real y simple: generar mandalas imprimibles r谩pido para mi abuela, desde cualquier dispositivo y sin pasos t茅cnicos.
+
+## Qu茅 hace
+- Genera mandalas nuevas en cada intento (enfoque diversidad-first).
+- Muestra vista previa inmediata en el navegador.
+- Exporta en PDF A4 imprimible.
+- Funciona como web responsive (desktop y mobile).
+
+## Privacidad
+No se recolectan, almacenan ni comparten datos personales.
+
+## Stack t茅cnico
+- Next.js + React
+- SVG + `svg2pdf.js` / `jsPDF`
+- `canvg` como fallback de render
+- Tests con Vitest y Playwright
+
+## Uso local
+```bash
+npm install
+npm run dev
+```
+Abrir `http://localhost:3000`.
 
 ## Scripts
 - `npm run dev`: entorno local
-- `npm run build`: build de producci髇
+- `npm run build`: build de producci贸n
 - `npm run start`: correr build
-- `npm run test`: tests unitarios/integraci髇 (Vitest)
+- `npm run test`: tests unitarios/integraci贸n (Vitest)
 - `npm run test:e2e`: tests end-to-end (Playwright)
 - `npm run lint`: lint con ESLint
 
-## Especificaci髇
+## Especificaci贸n
 - `docs/spec-mandalas.md`
