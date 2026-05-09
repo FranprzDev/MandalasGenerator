@@ -26,7 +26,6 @@ export function MandalaStudio() {
   const [history, setHistory] = useState<MandalaFingerprint[]>([initial.spec.fingerprint]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  const [attemptsUsed, setAttemptsUsed] = useState(initial.attempts);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -47,7 +46,6 @@ export function MandalaStudio() {
       );
       setMandala(result.spec);
       setHistory((prev) => pushHistory(prev, result.spec.fingerprint, DEFAULT_DIVERSITY_POLICY));
-      setAttemptsUsed(result.attempts);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Error al generar la mandala.");
     } finally {
@@ -128,12 +126,6 @@ export function MandalaStudio() {
         </div>
 
         {errorMessage && <p className="error">{errorMessage}</p>}
-        {mandala && (
-          <p className="meta">
-            Seed: {mandala.seed} | Capas: {mandala.stats.layers} | Sectores: {mandala.stats.sectors} | Intentos: {attemptsUsed}
-          </p>
-        )}
-
         <div className="canvas-wrap">{mandala && <MandalaCanvas spec={mandala} strokeWidth={strokeWidth} svgRef={svgRef} />}</div>
       </section>
     </main>
