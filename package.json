@@ -1,0 +1,50 @@
+{
+  "name": "mandalasgenerator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Proyecto web en Next.js para generar mandalas aleatorias en el navegador y exportarlas en PDF imprimible.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FranprzDev/MandalasGenerator.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FranprzDev/MandalasGenerator/issues"
+  },
+  "homepage": "https://github.com/FranprzDev/MandalasGenerator#readme",
+  "dependencies": {
+    "canvg": "^4.0.3",
+    "jspdf": "^4.2.1",
+    "next": "^16.2.6",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "seedrandom": "^3.0.5",
+    "svg2pdf.js": "^2.7.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^25.6.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@types/seedrandom": "^3.0.8",
+    "@vitest/coverage-v8": "^4.1.5",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.6",
+    "jsdom": "^29.1.1",
+    "playwright": "^1.59.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  }
+}
