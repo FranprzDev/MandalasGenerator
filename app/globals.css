@@ -5,6 +5,11 @@
   --ink: #111111;
   --paper: #fffefb;
   --accent: #0f766e;
+  --ghibli-forest: #2f5d43;
+  --ghibli-moss: #597a56;
+  --ghibli-sun: #f4d38f;
+  --ghibli-cream: #fff7e7;
+  --ghibli-bark: #50362d;
 }
 
 * {
@@ -38,6 +43,7 @@ body {
   border-radius: 20px;
   padding: 1.25rem;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.09);
+  text-align: center;
 }
 
 h1 {
@@ -54,30 +60,56 @@ p {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+  justify-content: center;
 }
 
 button {
-  border: 0;
-  border-radius: 999px;
-  padding: 0.7rem 1.2rem;
+  border: 1px solid rgba(80, 54, 45, 0.2);
+  border-radius: 16px;
+  padding: 0.78rem 1.28rem;
   font: inherit;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: transform 160ms ease, opacity 160ms ease;
+  transition: transform 180ms ease, opacity 160ms ease, box-shadow 180ms ease, filter 180ms ease;
+  box-shadow: 0 6px 0 rgba(80, 54, 45, 0.18), 0 12px 20px rgba(80, 54, 45, 0.12);
+  position: relative;
+  isolation: isolate;
+}
+
+button::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 14px;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.16) 0.8px, transparent 0.8px);
+  background-size: 6px 6px;
+  opacity: 0.45;
+  z-index: -1;
 }
 
 .btn-primary {
-  background: var(--accent);
-  color: #fff;
+  background: linear-gradient(180deg, #5f8761 0%, var(--ghibli-forest) 100%);
+  color: var(--ghibli-cream);
+  border-color: rgba(37, 76, 53, 0.45);
 }
 
 .btn-dark {
-  background: #111;
-  color: #fff;
+  background: linear-gradient(180deg, #f3dca7 0%, var(--ghibli-sun) 100%);
+  color: var(--ghibli-bark);
+  border-color: rgba(122, 86, 44, 0.35);
 }
 
 button:hover:not(:disabled) {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 rgba(80, 54, 45, 0.18), 0 18px 26px rgba(80, 54, 45, 0.16);
+  filter: saturate(1.05);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 rgba(80, 54, 45, 0.2), 0 6px 12px rgba(80, 54, 45, 0.12);
 }
 
 button:disabled {
