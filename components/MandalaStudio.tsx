@@ -97,7 +97,7 @@ export function MandalaStudio() {
         page: "A4",
         orientation: "portrait",
         marginMm: 10,
-        mode: "raster-only",
+        mode: "vector-first",
         filename: `mandalas-10-${Date.now()}.pdf`,
       });
     } catch (error) {

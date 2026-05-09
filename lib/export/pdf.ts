@@ -30,7 +30,7 @@ async function exportRaster(svgEl: SVGSVGElement, options: ExportOptions): Promi
   const { jsPDF } = await import("jspdf");
   const { Canvg } = await import("canvg");
 
-  const dpi = 300;
+  const dpi = 180;
   const widthPx = Math.round((A4_WIDTH_MM / 25.4) * dpi);
   const heightPx = Math.round((A4_HEIGHT_MM / 25.4) * dpi);
   const marginPx = Math.round((options.marginMm / 25.4) * dpi);
@@ -53,9 +53,9 @@ async function exportRaster(svgEl: SVGSVGElement, options: ExportOptions): Promi
   await v.render();
   ctx.restore();
 
-  const img = canvas.toDataURL("image/png");
-  const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  pdf.addImage(img, "PNG", 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM);
+  const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
+  const jpg = canvas.toDataURL("image/jpeg", 0.82);
+  pdf.addImage(jpg, "JPEG", 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM, undefined, "FAST");
 
   return pdf.output("blob");
 }
@@ -137,8 +137,8 @@ export async function exportBatchAndDownload(
 
   const { jsPDF } = await import("jspdf");
   const { Canvg } = await import("canvg");
-  const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const dpi = 220;
+  const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
+  const dpi = 160;
   const widthPx = Math.round((A4_WIDTH_MM / 25.4) * dpi);
   const heightPx = Math.round((A4_HEIGHT_MM / 25.4) * dpi);
   const marginPx = Math.round((options.marginMm / 25.4) * dpi);
@@ -163,8 +163,8 @@ export async function exportBatchAndDownload(
     ctx.restore();
 
     if (i > 0) pdf.addPage("a4", "portrait");
-    const img = canvas.toDataURL("image/png");
-    pdf.addImage(img, "PNG", 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM);
+    const img = canvas.toDataURL("image/jpeg", 0.78);
+    pdf.addImage(img, "JPEG", 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM, undefined, "FAST");
     await yieldToMainThread();
   }
 
